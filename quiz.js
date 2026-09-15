@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const startScreen = document.getElementById('quiz-start');
-  const startBtn = document.getElementById('quiz-start-btn');
+  const beginnerBtn = document.getElementById('quiz-start-beginner-btn');
+  const intermediateBtn = document.getElementById('quiz-start-intermediate-btn');
   const playArea = document.getElementById('quiz-play');
+  const levelBadge = document.getElementById('quiz-level-badge');
   const progressText = document.getElementById('quiz-progress-text');
   const progressFill = document.getElementById('quiz-progress-fill');
   const questionBox = document.getElementById('quiz-question-box');
@@ -21,15 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultScoreEl = document.getElementById('quiz-result-score');
   const resultMessageEl = document.getElementById('quiz-result-message');
   const restartBtn = document.getElementById('quiz-restart-btn');
+  const levelSelectBtn = document.getElementById('quiz-level-select-btn');
 
   // 問題プールが何問に増えても、1回のプレイで出題するのはこの数だけ。
   const QUESTIONS_PER_ROUND = 10;
+
+  const LEVEL_LABELS = {
+    beginner: '初級編（○×）',
+    intermediate: '中級編（5択）'
+  };
 
   let questions = [];
   let currentIndex = 0;
   let score = 0;
   let currentChoices = [];
   let currentAnswerIndex = -1;
+  let currentLevel = null;
 
   function shuffle(array) {
     const result = array.slice();
@@ -40,16 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
     return result;
   }
 
-  function startQuiz() {
-    const roundSize = Math.min(QUESTIONS_PER_ROUND, teaQuizQuestions.length);
-    questions = shuffle(teaQuizQuestions).slice(0, roundSize);
+  function startQuiz(level) {
+    currentLevel = level;
+    const pool = teaQuizQuestions.filter(q => q.level === level);
+    const roundSize = Math.min(QUESTIONS_PER_ROUND, pool.length);
+    questions = shuffle(pool).slice(0, roundSize);
     currentIndex = 0;
     score = 0;
+    levelBadge.textContent = LEVEL_LABELS[level] || '';
     startScreen.hidden = true;
     resultEl.hidden = true;
     playArea.hidden = false;
     questionBox.hidden = false;
     renderQuestion();
+  }
+
+  function showLevelSelect() {
+    resultEl.hidden = true;
+    playArea.hidden = true;
+    startScreen.hidden = false;
   }
 
   function renderQuestion() {
@@ -119,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultEl.hidden = false;
 
     const total = questions.length;
-    resultTitleEl.textContent = 'クイズ終了！';
+    resultTitleEl.textContent = `${LEVEL_LABELS[currentLevel] || ''} クイズ終了！`;
     resultScoreEl.textContent = `${total}問中 ${score}問正解`;
 
     const rate = score / total;
@@ -136,7 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
     resultMessageEl.textContent = message;
   }
 
-  startBtn.addEventListener('click', startQuiz);
+  beginnerBtn.addEventListener('click', () => startQuiz('beginner'));
+  intermediateBtn.addEventListener('click', () => startQuiz('intermediate'));
   nextBtn.addEventListener('click', goNext);
-  restartBtn.addEventListener('click', startQuiz);
+  restartBtn.addEventListener('click', () => startQuiz(currentLevel));
+  levelSelectBtn.addEventListener('click', showLevelSelect);
 });

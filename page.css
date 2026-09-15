@@ -505,6 +505,17 @@
   margin-bottom: 1.5rem;
 }
 
+.quiz-level-badge {
+  display: inline-block;
+  background-color: #0d6828;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+}
+
 .quiz-progress-text,
 #quiz-progress-text {
   display: block;
@@ -657,6 +668,15 @@
   width: 100%;
   min-height: 70rem;
   border: none;
+}
+
+.visitor-counter {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.visitor-counter img {
+  vertical-align: middle;
 }
 
 @media (max-width: 768px) {

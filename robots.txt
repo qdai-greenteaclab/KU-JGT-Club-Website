@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /tea_shop.html
+
+Sitemap: https://quniversity-greenteaclub-hp.vercel.app/sitemap.xml

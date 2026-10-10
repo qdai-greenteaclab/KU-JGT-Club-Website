@@ -105,36 +105,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealTargets.forEach(el => revealObserver.observe(el));
   }
-
-  // About us「3つの系」スクロールテリング演出
-  const seriesSteps = document.querySelectorAll('.series-step');
-  const seriesImgs = document.querySelectorAll('.series-img');
-  const seriesDots = document.querySelectorAll('.series-dot');
-
-  if (seriesSteps.length && 'IntersectionObserver' in window) {
-    const activateSeries = (key) => {
-      seriesSteps.forEach(s => s.classList.toggle('active', s.dataset.series === key));
-      seriesImgs.forEach(i => i.classList.toggle('active', i.dataset.series === key));
-      seriesDots.forEach(d => d.classList.toggle('active', d.dataset.series === key));
-    };
-
-    const seriesObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          activateSeries(entry.target.dataset.series);
-        }
-      });
-    }, { threshold: 0.5, rootMargin: '-30% 0px -30% 0px' });
-
-    seriesSteps.forEach(step => seriesObserver.observe(step));
-
-    seriesDots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        const target = document.querySelector(`.series-step[data-series="${dot.dataset.series}"]`);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    });
-  }
 });
